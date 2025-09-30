@@ -4,12 +4,13 @@
  * print_char - Prints a character
  * @args: argument list containing the character
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed (1)
  */
 int print_char(va_list args)
 {
-	char c = va_arg(args, int);
+	char c;
 
+	c = va_arg(args, int);
 	return (_putchar(c));
 }
 
@@ -34,4 +35,16 @@ int print_string(va_list args)
 		i++;
 	}
 	return (i);
+}
+
+/**
+ * print_percent - Prints a percent sign
+ * @args: argument list (unused)
+ *
+ * Return: Number of characters printed (1)
+ */
+int print_percent(va_list args)
+{
+	(void)args;
+	return (_putchar('%'));
 }
