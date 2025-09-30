@@ -2,33 +2,36 @@
 
 /**
  * print_char - Prints a character
- * @c: Character to print
+ * @args: argument list containing the character
  *
  * Return: Number of characters printed
  */
-int print_char(char c)
+int print_char(va_list args)
 {
-	int count;
+	char c = va_arg(args, int);
 
-	count = _putchar(c);
-	return (count);
+	return (_putchar(c));
 }
 
 /**
  * print_string - Prints a string
- * @str: String to print
+ * @args: argument list containing the string
  *
  * Return: Number of characters printed
  */
-int print_string(char *str)
+int print_string(va_list args)
 {
-	int i;
+	char *str;
+	int i = 0;
 
+	str = va_arg(args, char *);
 	if (str == NULL)
 		str = "(null)";
-	for (i = 0; str[i] != '\0'; i++)
+
+	while (str[i] != '\0')
 	{
 		_putchar(str[i]);
+		i++;
 	}
 	return (i);
 }
