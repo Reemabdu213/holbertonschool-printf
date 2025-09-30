@@ -1,29 +1,29 @@
 #include "main.h"
 
 /**
- * specifiers_handler - handles format specifiers
- * @specifier: format specifier
- * @args: arguments list
+ * specifiers_handler - handles a single format specifier
+ * @specifier: format specifier character
+ * @args: variadic arguments list
  * Return: number of characters printed
  */
 int specifiers_handler(char specifier, va_list args)
 {
 	int count = 0;
-	char *str;
+	char *s;
 
 	if (specifier == 'c')
 	{
-		count += _putchar(va_arg(args, int));
+		count += _putchar((char)va_arg(args, int));
 	}
 	else if (specifier == 's')
 	{
-		str = va_arg(args, char *);
-		if (str == NULL)
-			str = "(null)";
-		while (*str)
+		s = va_arg(args, char *);
+		if (s == NULL)
+			s = "(null)";
+		while (*s)
 		{
-			_putchar(*str);
-			str++;
+			_putchar(*s);
+			s++;
 			count++;
 		}
 	}
