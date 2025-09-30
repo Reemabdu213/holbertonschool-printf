@@ -1,52 +1,60 @@
 #include "main.h"
 
 /**
- * _printf - Produces output according to a format
- * @format: A character string, composed of zero or more directives
+ * _printf - print formatted data to the standard output
  *
- * Return: The number of characters printed
+ * @format: format string containing conversion specifiers
+ *
+ * Description: the _printf function parses the format string and processes
+ *              each conversion specifier by calling the appropriate function
+ *              to print the corresponding data type. Additional arguments
+ *              after @format are retrieved using va_list and va_start to
+ *              access the variable arguments. The function returns the total
+ *              number of characters printed.
+ *
+ * Return: -1 if format is NULL
+ *         the number of characters printed (the total length string)
  */
+
 int _printf(const char *format, ...)
 {
-	int count = 0;
-	va_list args;
+	int index_format = 0;
+	int total_length = 0;
 
-	if (format == NULL)
-		return (-1);
+	va_list arguments;
 
-	va_start(args, format);
+	va_start(arguments, format);
 
-	while (*format)
+	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
 	{
-		if (*format == '%')
+		return (-1);
+	}
+
+	/* loop through the format string to process each character */
+	while (format[index_format] != '\0')
+	{
+		if (format[index_format] == '%')
 		{
-			format++;
-			if (*format == 'c')
-				count += print_char(args);
-			else if (*format == 's')
-				count += print_string(args);
-			else if (*format == 'd' || *format == 'i')
-				count += print_int(args);
-			else if (*format == '%')
-			{
-				_putchar('%');
-				count++;
-			}
-			else
-			{
-				_putchar('%');
-				_putchar(*format);
-				count += 2;
-			}
+			/**
+			 * if a '%' is found,
+			 * call specifiers_handler to process the conversion specifier
+			 */
+			total_length += specifiers_handler(format[index_format + 1], arguments);
+			/* move to the next character after the conversion specifier */
+			index_format += 2;
 		}
 		else
 		{
-			_putchar(*format);
-			count++;
+			/**
+			 * if it's not a '%',
+			 * directly print the character and update the total_length
+			 */
+			total_length += _putchar(format[index_format]);
+			index_format++;
 		}
-		format++;
 	}
 
-	va_end(args);
-	return (count);
-}
+	va_end(arguments);
+
+	return (total_length);
+}				
