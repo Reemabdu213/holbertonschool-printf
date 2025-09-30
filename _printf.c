@@ -1,6 +1,18 @@
 #include "main.h"
 
 /**
+ * print_normal_char - Prints a normal character (not a specifier)
+ * @c: Character to print
+ *
+ * Return: Number of characters printed (1)
+ */
+int print_normal_char(char c)
+{
+	_putchar(c);
+	return (1);
+}
+
+/**
  * handle_specifier - Handles format specifiers
  * @specifier: The format specifier character
  * @args: Argument list containing the values
@@ -43,15 +55,14 @@ int _printf(const char *format, ...)
 			if (format[i] == '\0')
 			{
 				va_end(args);
-				return (-1); /* Error: % at end of string */
+				return (-1); /* Case: % at end */
 			}
 
 			result = handle_specifier(format[i], args);
 			if (result == -1)
 			{
-				_putchar('%');
-				_putchar(format[i]);
-				count += 2;
+				count += print_normal_char('%');
+				count += print_normal_char(format[i]);
 			}
 			else
 			{
@@ -60,8 +71,7 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
-			_putchar(format[i]);
-			count++;
+			count += print_normal_char(format[i]);
 		}
 		i++;
 	}
