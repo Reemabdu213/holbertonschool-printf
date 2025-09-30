@@ -23,7 +23,7 @@ int handle_specifier(char specifier, va_list args)
  * _printf - Produces output according to a format
  * @format: Character string composed of zero or more directives
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed, or -1 on error
  */
 int _printf(const char *format, ...)
 {
@@ -40,6 +40,12 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			i++;
+			if (format[i] == '\0')
+			{
+				va_end(args);
+				return (-1); /* Error: % at end of string */
+			}
+
 			result = handle_specifier(format[i], args);
 			if (result == -1)
 			{
@@ -48,7 +54,9 @@ int _printf(const char *format, ...)
 				count += 2;
 			}
 			else
+			{
 				count += result;
+			}
 		}
 		else
 		{
