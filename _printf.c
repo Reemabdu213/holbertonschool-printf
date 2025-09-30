@@ -8,7 +8,8 @@
  */
 int _printf(const char *format, ...)
 {
-	int i = 0, total = 0;
+	int i = 0;
+	int total = 0;
 	va_list args;
 
 	if (format == NULL)
@@ -31,7 +32,7 @@ int _printf(const char *format, ...)
 		if (format[i] == '\0')
 		{
 			va_end(args);
-			return (-1); /* solitary '%' -> error per checker */
+			return (-1);
 		}
 
 		if (format[i] == '%')

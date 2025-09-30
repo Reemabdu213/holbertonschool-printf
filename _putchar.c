@@ -1,9 +1,10 @@
 #include "main.h"
 
 /**
- * _putchar - writes a character to stdout
+ * _putchar - writes one character to stdout
  * @c: character to print
- * Return: number of bytes written on success, -1 on error
+ *
+ * Return: bytes written on success, -1 on error
  */
 int _putchar(char c)
 {

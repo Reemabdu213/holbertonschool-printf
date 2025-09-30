@@ -1,9 +1,10 @@
 #include "main.h"
 
 /**
- * specifiers_handler - handles a single format specifier
+ * specifiers_handler - handles one format specifier
  * @specifier: format specifier character
  * @args: variadic arguments list
+ *
  * Return: number of characters printed
  */
 int specifiers_handler(char specifier, va_list args)
@@ -20,7 +21,7 @@ int specifiers_handler(char specifier, va_list args)
 		s = va_arg(args, char *);
 		if (s == NULL)
 			s = "(null)";
-		while (*s)
+		while (*s != '\0')
 		{
 			_putchar(*s);
 			s++;
