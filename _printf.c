@@ -1,51 +1,61 @@
 #include "main.h"
 
 /**
- * _printf - prints a formatted string
- * @format: the string to format
+ * handle_specifier - Handles format specifiers
+ * @specifier: The format specifier character
+ * @args: Argument list containing the values
  *
- * Return: The number of printed characters, or -1 if format is NULL
+ * Return: Number of characters printed
+ */
+int handle_specifier(char specifier, va_list args)
+{
+	if (specifier == 'c')
+		return (print_char(args));
+	else if (specifier == 's')
+		return (print_string(args));
+	else if (specifier == '%')
+		return (print_percent(args));
+
+	return (-1);
+}
+
+/**
+ * _printf - Produces output according to a format
+ * @format: Character string composed of zero or more directives
+ *
+ * Return: Number of characters printed
  */
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int i;
-	int count = 0;
+	int i = 0, count = 0, result;
 
 	if (format == NULL)
 		return (-1);
 
 	va_start(args, format);
 
-	for (i = 0; format[i]; i++)
+	while (format[i] != '\0')
 	{
 		if (format[i] == '%')
 		{
-			if (!format[i + 1]) /* case: single '%' */
-			{
-				va_end(args);
-				return (-1);
-			}
-
 			i++;
-			if (format[i] == 'c')
-				count += print_char(args);
-			else if (format[i] == 's')
-				count += print_string(args);
-			else if (format[i] == '%')
-				count += print_percent(args);
-			else
+			result = handle_specifier(format[i], args);
+			if (result == -1)
 			{
 				_putchar('%');
 				_putchar(format[i]);
 				count += 2;
 			}
+			else
+				count += result;
 		}
 		else
 		{
 			_putchar(format[i]);
 			count++;
 		}
+		i++;
 	}
 
 	va_end(args);
