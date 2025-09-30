@@ -1,6 +1,0 @@
-main.c
-*.o
-test
-print_int.c
-print_percent.c
-printf_betty
