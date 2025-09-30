@@ -1,117 +1,53 @@
 #include "main.h"
-#include <stdarg.h>
 
 /**
- * print_char - prints a single character
- * @ap: argument list containing the character
- * Return: number of characters printed, -1 on error
- */
-static int print_char(va_list ap)
-{
-	char c = (char)va_arg(ap, int);
-
-	if (_putchar(c) == -1)
-		return (-1);
-	return (1);
-}
-
-/**
- * print_string - prints a string
- * @ap: argument list containing the string
- * Return: number of characters printed, -1 on error
- */
-static int print_string(va_list ap)
-{
-	const char *s = va_arg(ap, char *);
-	int count = 0;
-
-	if (!s)
-		s = "(null)";
-	while (*s)
-	{
-		if (_putchar(*s) == -1)
-			return (-1);
-		s++;
-		count++;
-	}
-	return (count);
-}
-
-/**
- * print_percent - prints a percent sign
- * Return: number of characters printed, -1 on error
- */
-static int print_percent(void)
-{
-	if (_putchar('%') == -1)
-		return (-1);
-	return (1);
-}
-
-/**
- * handle_specifier - handles a single format specifier
- * @sp: format specifier character
- * @ap: argument list
- * Return: number of characters printed, -1 on error
- */
-static int handle_specifier(char sp, va_list ap)
-{
-	if (sp == 'c')
-		return (print_char(ap));
-	else if (sp == 's')
-		return (print_string(ap));
-	else if (sp == '%')
-		return (print_percent());
-
-	if (_putchar('%') == -1)
-		return (-1);
-	if (_putchar(sp) == -1)
-		return (-1);
-	return (2);
-}
-
-/**
- * _printf - prints output according to a format
- * @format: format string containing directives
- * Description: handles %c, %s, and %% conversion specifiers.
- * Return: number of characters printed (excluding null byte), -1 on error
+ * _printf - prints a formatted string
+ * @format: the string to format
+ *
+ * Return: The number of printed characters, or -1 if format is NULL
  */
 int _printf(const char *format, ...)
 {
-	va_list ap;
-	int i = 0, total = 0, added = 0;
+	va_list args;
+	int i;
+	int count = 0;
 
-	if (!format)
+	if (format == NULL)
 		return (-1);
 
-	va_start(ap, format);
-	while (format[i])
+	va_start(args, format);
+
+	for (i = 0; format[i]; i++)
 	{
-		if (format[i] != '%')
+		if (format[i] == '%')
 		{
-			if (_putchar(format[i]) == -1)
+			if (!format[i + 1]) /* case: single '%' */
 			{
-				va_end(ap);
+				va_end(args);
 				return (-1);
 			}
-			total++;
+
 			i++;
-			continue;
+			if (format[i] == 'c')
+				count += print_char(args);
+			else if (format[i] == 's')
+				count += print_string(args);
+			else if (format[i] == '%')
+				count += print_percent(args);
+			else
+			{
+				_putchar('%');
+				_putchar(format[i]);
+				count += 2;
+			}
 		}
-		i++;
-		if (!format[i])
+		else
 		{
-			va_end(ap);
-			return (-1);
+			_putchar(format[i]);
+			count++;
 		}
-		added = handle_specifier(format[i], ap);
-		if (added == -1)
-		{
-			va_end(ap);
-			return (-1);
-		}
-		total += added;
-		i++;
 	}
-	va_end(ap);
-	return (total);
+
+	va_end(args);
+	return (count);
+}
