@@ -1,60 +1,70 @@
 #include "main.h"
+#include <stdarg.h>
+#include <unistd.h>
+#include <stddef.h>
 
-/**
- * _printf - print formatted data to the standard output
- *
- * @format: format string containing conversion specifiers
- *
- * Description: the _printf function parses the format string and processes
- *              each conversion specifier by calling the appropriate function
- *              to print the corresponding data type. Additional arguments
- *              after @format are retrieved using va_list and va_start to
- *              access the variable arguments. The function returns the total
- *              number of characters printed.
- *
- * Return: -1 if format is NULL
- *         the number of characters printed (the total length string)
- */
+static int put_char(char c)
+{
+    return (write(1, &c, 1));
+}
+
+static int put_str(char *s)
+{
+    int cnt = 0;
+
+    if (s == NULL)
+        s = "(null)";
+
+    while (*s)
+    {
+        write(1, s, 1);
+        s++;
+        cnt++;
+    }
+    return (cnt);
+}
 
 int _printf(const char *format, ...)
 {
-	int index_format = 0;
-	int total_length = 0;
+    va_list args;
+    int i = 0, count = 0;
 
-	va_list arguments;
+    if (format == NULL)
+        return (-1);
 
-	va_start(arguments, format);
+    va_start(args, format);
 
-	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
-	{
-		return (-1);
-	}
+    while (format[i])
+    {
+        if (format[i] != '%')
+        {
+            count += put_char(format[i]);
+            i++;
+            continue;
+        }
+        i++;
+        if (format[i] == '\0')
+        {
+            va_end(args);
+            return (-1);
+        }
 
-	/* loop through the format string to process each character */
-	while (format[index_format] != '\0')
-	{
-		if (format[index_format] == '%')
-		{
-			/**
-			 * if a '%' is found,
-			 * call specifiers_handler to process the conversion specifier
-			 */
-			total_length += specifiers_handler(format[index_format + 1], arguments);
-			/* move to the next character after the conversion specifier */
-			index_format += 2;
-		}
-		else
-		{
-			/**
-			 * if it's not a '%',
-			 * directly print the character and update the total_length
-			 */
-			total_length += _putchar(format[index_format]);
-			index_format++;
-		}
-	}
+        if (format[i] == 'c')
+            count += put_char((char)va_arg(args, int));
+        else if (format[i] == 's')
+            count += put_str(va_arg(args, char *));
+        else if (format[i] == '%')
+            count += put_char('%');
+        else if (format[i] == 'd' || format[i] == 'i')
+            count += print_int(va_arg(args, int));
+        else
+        {
+            count += put_char('%');
+            count += put_char(format[i]);
+        }
+        i++;
+    }
 
-	va_end(arguments);
-
-	return (total_length);
+    va_end(args);
+    return (count);
 }				
