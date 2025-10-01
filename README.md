@@ -1,2 +1,1 @@
-# _printf
-Simple implementation supporting %c, %s and %%
+int printf ( const char * format, ... );
