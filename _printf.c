@@ -1,6 +1,12 @@
 #include "main.h"
 #include <stdarg.h>
 
+/* Prototypes */
+int print_normal_char(char c);
+int handle_specifier(char specifier, va_list args);
+int print_string(char *str);
+int print_number(int n);
+
 /**
  * _printf - Prints a formatted string
  * @format: Format string
@@ -34,7 +40,7 @@ int _printf(const char *format, ...)
 }
 
 /**
- * print_normal_char - Prints a normal character
+ * print_normal_char - Prints a single character
  * @c: Character to print
  *
  * Return: Number of characters printed (1)
@@ -47,7 +53,7 @@ int print_normal_char(char c)
 
 /**
  * handle_specifier - Handles format specifiers
- * @specifier: The format specifier character
+ * @specifier: Format specifier character
  * @args: Argument list
  *
  * Return: Number of characters printed
