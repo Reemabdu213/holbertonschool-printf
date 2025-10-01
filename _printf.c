@@ -1,87 +1,63 @@
 #include "main.h"
-#include <stdarg.h>
-
-/* Prototypes */
-int print_normal_char(char c);
-int handle_specifier(char specifier, va_list args);
-int print_string(char *str);
-int print_number(int n);
 
 /**
- * _printf - Prints a formatted string
- * @format: Format string
- *
- * Return: Number of characters printed
+ * handle_specifier - checks and executes matching format specifier
+ * @c: specifier character
+ * @ap: argument list
+ * Return: number of characters printed
+ */
+int handle_specifier(char c, va_list ap)
+{
+	int k = 0;
+	spec_t table[] = {
+		{'c', print_char}, {'s', print_string},
+		{'%', print_percent}, {'d', print_int},
+		{'i', print_int}, {'\0', NULL}
+	};
+
+	while (table[k].sp)
+	{
+		if (table[k].sp == c)
+			return (table[k].func(ap));
+		k++;
+	}
+	_putchar('%');
+	_putchar(c);
+	return (2);
+}
+
+/**
+ * _printf - produces output according to a format
+ * @format: format string
+ * Return: number of characters printed
  */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	int printed = 0;
-
-	va_start(args, format);
-
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			if (*format)
-				printed += handle_specifier(*format, args);
-		}
-		else
-		{
-			printed += print_normal_char(*format);
-		}
-		format++;
-	}
-
-	va_end(args);
-	return (printed);
-}
-
-/**
- * print_normal_char - Prints a single character
- * @c: Character to print
- *
- * Return: Number of characters printed (1)
- */
-int print_normal_char(char c)
-{
-	_putchar(c);
-	return (1);
-}
-
-/**
- * handle_specifier - Handles format specifiers
- * @specifier: Format specifier character
- * @args: Argument list
- *
- * Return: Number of characters printed
- */
-int handle_specifier(char specifier, va_list args)
-{
+	va_list ap;
+	int i = 0;
 	int count = 0;
 
-	switch (specifier)
-	{
-		case 'c':
-			count += print_normal_char(va_arg(args, int));
-			break;
-		case 's':
-			count += print_string(va_arg(args, char *));
-			break;
-		case 'd':
-		case 'i':
-			count += print_number(va_arg(args, int));
-			break;
-		case '%':
-			count += print_normal_char('%');
-			break;
-		default:
-			count += print_normal_char('%');
-			count += print_normal_char(specifier);
-			break;
-	}
+	if (!format)
+		return (-1);
 
+	va_start(ap, format);
+	while (format[i])
+	{
+		if (format[i] != '%')
+		{
+			count += _putchar(format[i]);
+			i++;
+			continue;
+		}
+		i++;
+		if (!format[i])
+		{
+			va_end(ap);
+			return (-1);
+		}
+		count += handle_specifier(format[i], ap);
+		i++;
+	}
+	va_end(ap);
 	return (count);
 }
