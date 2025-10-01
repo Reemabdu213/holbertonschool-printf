@@ -1,7 +1,40 @@
 #include "main.h"
+#include <stdarg.h>
 
 /**
- * print_normal_char - Prints a normal character (not a specifier)
+ * _printf - Prints a formatted string
+ * @format: Format string
+ *
+ * Return: Number of characters printed
+ */
+int _printf(const char *format, ...)
+{
+	va_list args;
+	int printed = 0;
+
+	va_start(args, format);
+
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
+			if (*format)
+				printed += handle_specifier(*format, args);
+		}
+		else
+		{
+			printed += print_normal_char(*format);
+		}
+		format++;
+	}
+
+	va_end(args);
+	return (printed);
+}
+
+/**
+ * print_normal_char - Prints a normal character
  * @c: Character to print
  *
  * Return: Number of characters printed (1)
@@ -15,67 +48,34 @@ int print_normal_char(char c)
 /**
  * handle_specifier - Handles format specifiers
  * @specifier: The format specifier character
- * @args: Argument list containing the values
+ * @args: Argument list
  *
  * Return: Number of characters printed
  */
 int handle_specifier(char specifier, va_list args)
 {
-	if (specifier == 'c')
-		return (print_char(args));
-	else if (specifier == 's')
-		return (print_string(args));
-	else if (specifier == '%')
-		return (print_percent(args));
+	int count = 0;
 
-	return (-1);
-}
-
-/**
- * _printf - Produces output according to a format
- * @format: Character string composed of zero or more directives
- *
- * Return: Number of characters printed, or -1 on error
- */
-int _printf(const char *format, ...)
-{
-	va_list args;
-	int i = 0, count = 0, result;
-
-	if (format == NULL)
-		return (-1);
-
-	va_start(args, format);
-
-	while (format[i] != '\0')
+	switch (specifier)
 	{
-		if (format[i] == '%')
-		{
-			i++;
-			if (format[i] == '\0')
-			{
-				va_end(args);
-				return (-1); /* Case: % at end */
-			}
-
-			result = handle_specifier(format[i], args);
-			if (result == -1)
-			{
-				count += print_normal_char('%');
-				count += print_normal_char(format[i]);
-			}
-			else
-			{
-				count += result;
-			}
-		}
-		else
-		{
-			count += print_normal_char(format[i]);
-		}
-		i++;
+		case 'c':
+			count += print_normal_char(va_arg(args, int));
+			break;
+		case 's':
+			count += print_string(va_arg(args, char *));
+			break;
+		case 'd':
+		case 'i':
+			count += print_number(va_arg(args, int));
+			break;
+		case '%':
+			count += print_normal_char('%');
+			break;
+		default:
+			count += print_normal_char('%');
+			count += print_normal_char(specifier);
+			break;
 	}
 
-	va_end(args);
 	return (count);
 }
