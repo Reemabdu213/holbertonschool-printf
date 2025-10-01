@@ -1,10 +1,10 @@
 #include "main.h"
 
 /**
- * _putchar - Prints a character to stdout.
- * @c: The character to print.
+ * _putchar - Print a character
+ * @c: Character to print
  *
- * Return: 1 on success.
+ * Return: 1 for success
  */
 int _putchar(char c)
 {
@@ -12,10 +12,10 @@ int _putchar(char c)
 }
 
 /**
- * print_string - Prints a string to stdout.
- * @str: The string to print.
+ * print_string - Print a string
+ * @str: String to print
  *
- * Return: Number of characters printed.
+ * Return: Number of characters printed
  */
 int print_string(char *str)
 {
@@ -31,10 +31,10 @@ int print_string(char *str)
 }
 
 /**
- * print_unsigned - Prints an unsigned integer in base 10.
- * @n: The number to print.
+ * print_unsigned - Print an unsigned int in base 10
+ * @n: The number to print
  *
- * Return: Number of characters printed.
+ * Return: Number of characters printed
  */
 int print_unsigned(unsigned int n)
 {
@@ -49,13 +49,13 @@ int print_unsigned(unsigned int n)
 }
 
 /**
- * print_number - Prints a signed integer in base 10.
- * @n: The number to print (can be negative).
+ * print_number - Print a signed integer in base 10
+ * @n: The number to print (may be negative)
  *
  * Description: Handles INT_MIN safely by promoting to long before
- * converting to unsigned.
+ * converting to unsigned
  *
- * Return: Number of characters printed.
+ * Return: Number of characters printed
  */
 int print_number(int n)
 {
@@ -75,4 +75,4 @@ int print_number(int n)
 	count += print_unsigned(u);
 
 	return (count);
-}
+	{
