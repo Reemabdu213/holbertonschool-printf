@@ -3,11 +3,41 @@
 
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <limits.h>
 
-int _putchar(char c);
+#define BUFFER_SIZE 1024
+
+/* Core printf function */
 int _printf(const char *format, ...);
 
-/* Advanced: binary support */
-int print_binary(unsigned int n);
+/* Original print functions (without buffer) */
+int print_char(va_list args);
+int print_string(va_list args);
+int print_percent(va_list args);
+int print_integer(va_list args);
+int print_unsigned(va_list args);
+int print_octal(va_list args);
+int print_hex_lower(va_list args);
+int print_hex_upper(va_list args);
 
-#endif /* MAIN_H */
+/* Buffer utility functions */
+int flush_buffer(char *buffer, int *index);
+int add_to_buffer(char c, char *buffer, int *index);
+
+/* Buffer-based print functions */
+int print_binary_buffer(unsigned int n, char *buffer, int *index);
+int print_char_buffer(va_list args, char *buffer, int *index);
+int print_string_buffer(va_list args, char *buffer, int *index);
+int print_string_special_buffer(va_list args, char *buffer, int *index);
+int print_percent_buffer(va_list args, char *buffer, int *index);
+int print_number_buffer(unsigned int num, char *buffer, int *index);
+int print_integer_buffer(va_list args, char *buffer, int *index);
+int print_unsigned_buffer(va_list args, char *buffer, int *index);
+int print_octal_buffer(unsigned int num, char *buffer, int *index);
+int print_hex_buffer(unsigned int num, char *buffer, int *index, int uppercase);
+
+/* Helper functions */
+int _putchar(char c);
+
+#endif
