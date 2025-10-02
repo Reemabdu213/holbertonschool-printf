@@ -4,8 +4,10 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-/* Core functions */
-int _putchar(char c);
 int _printf(const char *format, ...);
+int _putchar(char c);
+
+/* Advanced: binary support */
+int print_binary(unsigned int n);
 
 #endif /* MAIN_H */
