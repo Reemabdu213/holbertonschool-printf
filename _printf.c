@@ -1,22 +1,22 @@
 #include "main.h"
 
 /**
-	* _putchar - Write one character to stdout
-	* @c: character to print
-	*
-	* Return: 1 on success, -1 on error
-	*/
+ * _putchar - Write one character to stdout
+ * @c: character to print
+ *
+ * Return: 1 on success, -1 on error
+ */
 int _putchar(char c)
 {
 	return (write(1, &c, 1));
 }
 
 /**
-	* print_text - Print a string
-	* @s: pointer to string
-	*
-	* Return: number of characters printed
-	*/
+ * print_text - Print a string
+ * @s: pointer to string
+ *
+ * Return: number of characters printed
+ */
 static int print_text(char *s)
 {
 	int total = 0;
@@ -33,11 +33,11 @@ static int print_text(char *s)
 }
 
 /**
-	* print_int - Print integer
-	* @n: number to print
-	*
-	* Return: number of characters printed
-	*/
+ * print_int - Print integer
+ * @n: number to print
+ *
+ * Return: number of characters printed
+ */
 static int print_int(int n)
 {
 	unsigned int val;
@@ -59,12 +59,12 @@ static int print_int(int n)
 }
 
 /**
-	* handle_format - Manage one format specifier
-	* @c: the format character
-	* @ap: list of arguments
-	*
-	* Return: number of characters printed
-	*/
+ * handle_format - Manage one format specifier
+ * @c: the format character
+ * @ap: list of arguments
+ *
+ * Return: number of characters printed
+ */
 static int handle_format(char c, va_list ap)
 {
 	if (c == 'c')
@@ -78,13 +78,13 @@ static int handle_format(char c, va_list ap)
 	if (c == 'b')
 	return (print_binary(va_arg(ap, unsigned int)));
 if (c == 'u')
-	return (print_uint(va_arg(ap, unsigned int)));
+    return (print_uint(va_arg(ap, unsigned int)));
 if (c == 'o')
-	return (print_octal(va_arg(ap, unsigned int)));
+    return (print_octal(va_arg(ap, unsigned int)));
 if (c == 'x')
-	return (print_hex_low(va_arg(ap, unsigned int)));
+    return (print_hex_low(va_arg(ap, unsigned int)));
 if (c == 'X')
-	return (print_hex_up(va_arg(ap, unsigned int)));
+    return (print_hex_up(va_arg(ap, unsigned int)));
 
 	/* Unknown specifier: print it raw */
 	_putchar('%');
@@ -93,11 +93,11 @@ if (c == 'X')
 }
 
 /**
-	* _printf - Produce output like printf
-	* @format: format string
-	*
-	* Return: number of characters printed, -1 if error
-	*/
+ * _printf - Produce output like printf
+ * @format: format string
+ *
+ * Return: number of characters printed, -1 if error
+ */
 int _printf(const char *format, ...)
 {
 	va_list ap;
