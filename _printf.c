@@ -27,15 +27,13 @@ static int print_text(char *s)
 {
 	int total = 0;
 
-	if (s == (char *)0)
+	if (!s)
 		s = "(null)";
 
 	while (*s)
-	{
-		total += _putchar(*s);
-		s++;
-	}
-	return (total);
+		total += _putchar(*s++);
+
+	return total;
 }
 
 static int print_int(int n)
@@ -46,16 +44,16 @@ static int print_int(int n)
 	if (n < 0)
 	{
 		total += _putchar('-');
-		val = (unsigned int)(-n);
+		val = -n;
 	}
 	else
-		val = (unsigned int)n;
+		val = n;
 
 	if (val / 10)
-		total += print_int((int)(val / 10));
+		total += print_int(val / 10);
 
 	total += _putchar((val % 10) + '0');
-	return (total);
+	return total;
 }
 
 static int print_unsigned(unsigned int n)
@@ -66,7 +64,7 @@ static int print_unsigned(unsigned int n)
 		total += print_unsigned(n / 10);
 
 	total += _putchar((n % 10) + '0');
-	return (total);
+	return total;
 }
 
 static int print_octal(unsigned int n)
@@ -77,7 +75,7 @@ static int print_octal(unsigned int n)
 		total += print_octal(n / 8);
 
 	total += _putchar((n % 8) + '0');
-	return (total);
+	return total;
 }
 
 static int print_hex(unsigned int n, int uppercase)
@@ -89,33 +87,57 @@ static int print_hex(unsigned int n, int uppercase)
 		total += print_hex(n / 16, uppercase);
 
 	total += _putchar(digits[n % 16]);
-	return (total);
+	return total;
+}
+
+static int print_binary(unsigned int n)
+{
+	unsigned int mask = 1U << 31;
+	int total = 0, started = 0;
+
+	while (mask)
+	{
+		if (n & mask)
+		{
+			total += _putchar('1');
+			started = 1;
+		}
+		else if (started)
+			total += _putchar('0');
+
+		mask >>= 1;
+	}
+
+	if (!started)
+		total += _putchar('0');
+
+	return total;
 }
 
 static int handle_format(char c, va_list ap)
 {
 	if (c == 'c')
-		return (_putchar((char)va_arg(ap, int)));
+		return _putchar((char)va_arg(ap, int));
 	if (c == 's')
-		return (print_text(va_arg(ap, char *)));
+		return print_text(va_arg(ap, char *));
 	if (c == '%')
-		return (_putchar('%'));
+		return _putchar('%');
 	if (c == 'd' || c == 'i')
-		return (print_int(va_arg(ap, int)));
+		return print_int(va_arg(ap, int));
 	if (c == 'b')
-		return (print_binary(va_arg(ap, unsigned int)));
+		return print_binary(va_arg(ap, unsigned int));
 	if (c == 'u')
-		return (print_unsigned(va_arg(ap, unsigned int)));
+		return print_unsigned(va_arg(ap, unsigned int));
 	if (c == 'o')
-		return (print_octal(va_arg(ap, unsigned int)));
+		return print_octal(va_arg(ap, unsigned int));
 	if (c == 'x')
-		return (print_hex(va_arg(ap, unsigned int), 0));
+		return print_hex(va_arg(ap, unsigned int), 0);
 	if (c == 'X')
-		return (print_hex(va_arg(ap, unsigned int), 1));
+		return print_hex(va_arg(ap, unsigned int), 1);
 
 	_putchar('%');
 	_putchar(c);
-	return (2);
+	return 2;
 }
 
 int _printf(const char *format, ...)
@@ -123,32 +145,30 @@ int _printf(const char *format, ...)
 	va_list ap;
 	int count = 0;
 
-	if (format == (const char *)0)
-		return (-1);
+	if (!format)
+		return -1;
 
 	va_start(ap, format);
 
 	while (*format)
 	{
 		if (*format != '%')
-		{
 			count += _putchar(*format);
-		}
 		else
 		{
 			format++;
-			if (*format == '\0')
+			if (!*format)
 			{
 				va_end(ap);
 				flush_buffer();
-				return (-1);
+				return -1;
 			}
 			count += handle_format(*format, ap);
 		}
 		format++;
 	}
-	va_end(ap);
 
+	va_end(ap);
 	flush_buffer();
-	return (count);
+	return count;
 }
