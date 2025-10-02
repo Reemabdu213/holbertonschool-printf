@@ -76,7 +76,7 @@ static int handle_format(char c, va_list ap)
 	if (c == 'd' || c == 'i')
 		return (print_int(va_arg(ap, int)));
 	if (c == 'b')
-	      	return (print_binary(va_arg(ap, unsigned int)));
+		return (print_binary(va_arg(ap, unsigned int)));
 
 	/* Unknown specifier: print it raw */
 	_putchar('%');
