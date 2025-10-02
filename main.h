@@ -1,43 +1,124 @@
-#ifndef MAIN_H
-#define MAIN_H
+#include "main.h"
 
-#include <stdarg.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <limits.h>
+/**
+ * _putchar - Write one character to stdout
+ * @c: character to print
+ *
+ * Return: 1 on success, -1 on error
+ */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}
 
-#define BUFFER_SIZE 1024
+/**
+ * print_text - Print a string
+ * @s: pointer to string
+ *
+ * Return: number of characters printed
+ */
+static int print_text(char *s)
+{
+	int total = 0;
 
-/* Core printf function */
-int _printf(const char *format, ...);
+	if (s == (char *)0)
+		s = "(null)";
 
-/* Original print functions (without buffer) */
-int print_char(va_list args);
-int print_string(va_list args);
-int print_percent(va_list args);
-int print_integer(va_list args);
-int print_unsigned(va_list args);
-int print_octal(va_list args);
-int print_hex_lower(va_list args);
-int print_hex_upper(va_list args);
+	while (*s)
+	{
+		total += _putchar(*s);
+		s++;
+	}
+	return (total);
+}
 
-/* Buffer utility functions */
-int flush_buffer(char *buffer, int *index);
-int add_to_buffer(char c, char *buffer, int *index);
+/**
+ * print_int - Print integer
+ * @n: number to print
+ *
+ * Return: number of characters printed
+ */
+static int print_int(int n)
+{
+	unsigned int val;
+	int total = 0;
 
-/* Buffer-based print functions */
-int print_binary_buffer(unsigned int n, char *buffer, int *index);
-int print_char_buffer(va_list args, char *buffer, int *index);
-int print_string_buffer(va_list args, char *buffer, int *index);
-int print_string_special_buffer(va_list args, char *buffer, int *index);
-int print_percent_buffer(va_list args, char *buffer, int *index);
-int print_number_buffer(unsigned int num, char *buffer, int *index);
-int print_integer_buffer(va_list args, char *buffer, int *index);
-int print_unsigned_buffer(va_list args, char *buffer, int *index);
-int print_octal_buffer(unsigned int num, char *buffer, int *index);
-int print_hex_buffer(unsigned int num, char *buffer, int *index, int uppercase);
+	if (n < 0)
+	{
+		total += _putchar('-');
+		val = (unsigned int)(-n);
+	}
+	else
+		val = (unsigned int)n;
 
-/* Helper functions */
-int _putchar(char c);
+	if (val / 10)
+		total += print_int((int)(val / 10));
 
-#endif
+	total += _putchar((val % 10) + '0');
+	return (total);
+}
+
+/**
+ * handle_format - Manage one format specifier
+ * @c: the format character
+ * @ap: list of arguments
+ *
+ * Return: number of characters printed
+ */
+static int handle_format(char c, va_list ap)
+{
+	if (c == 'c')
+		return (_putchar((char)va_arg(ap, int)));
+	if (c == 's')
+		return (print_text(va_arg(ap, char *)));
+	if (c == '%')
+		return (_putchar('%'));
+	if (c == 'd' || c == 'i')
+		return (print_int(va_arg(ap, int)));
+	if (c == 'b')
+	      	return (print_binary(va_arg(ap, unsigned int)));
+
+	/* Unknown specifier: print it raw */
+	_putchar('%');
+	_putchar(c);
+	return (2);
+}
+
+/**
+ * _printf - Produce output like printf
+ * @format: format string
+ *
+ * Return: number of characters printed, -1 if error
+ */
+int _printf(const char *format, ...)
+{
+	va_list ap;
+	int count = 0;
+
+	if (format == (const char *)0)
+		return (-1);
+
+	va_start(ap, format);
+
+	while (*format)
+	{
+		if (*format != '%')
+		{
+			count += _putchar(*format);
+		}
+		else
+		{
+			format++;
+			if (*format == '\0')
+			{
+				va_end(ap);
+				return (-1);
+			}
+			count += handle_format(*format, ap);
+		}
+		format++;
+	}
+	va_end(ap);
+
+	return (count);
+}
