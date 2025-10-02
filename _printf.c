@@ -141,15 +141,15 @@ static int print_special_string(char *s)
 
 static int print_pointer(void *ptr)
 {
-	if (!ptr)
-		return print_text("(nil)");
+	if (!ptr)  /*± NUL pointer */
+	return print_text("(nil)");
 
 	unsigned long n = (unsigned long)ptr;
 	int total = 0;
 
 	total += _putchar('0');
 	total += _putchar('x');
-
+	
 	char *hex_digits = "0123456789abcdef";
 	char buf[16];
 	int i = 0;
@@ -160,8 +160,8 @@ static int print_pointer(void *ptr)
 		n /= 16;
 	}
 
-		while (i--)
-			total += _putchar(buf[i]);
+	while (i--)
+	total += _putchar(buf[i]);
 
 	return total;
 }
