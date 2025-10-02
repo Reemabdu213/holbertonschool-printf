@@ -114,12 +114,39 @@ static int print_binary(unsigned int n)
 	return total;
 }
 
+static int print_special_string(char *s)
+{
+	int total = 0;
+	char *hex_digits = "0123456789ABCDEF";
+
+	if (!s)
+		s = "(null)";
+
+	while (*s)
+	{
+		if ((*s > 0 && *s < 32) || *s >= 127)
+		{
+			total += _putchar('\\');
+			total += _putchar('x');
+			total += _putchar(hex_digits[(*s >> 4) & 0xF]);
+			total += _putchar(hex_digits[*s & 0xF]);
+		}
+		else
+			total += _putchar(*s);
+		s++;
+	}
+
+	return total;
+}
+
 static int handle_format(char c, va_list ap)
 {
 	if (c == 'c')
 		return _putchar((char)va_arg(ap, int));
 	if (c == 's')
 		return print_text(va_arg(ap, char *));
+	if (c == 'S')
+		return print_special_string(va_arg(ap, char *));
 	if (c == '%')
 		return _putchar('%');
 	if (c == 'd' || c == 'i')
