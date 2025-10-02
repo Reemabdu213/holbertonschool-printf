@@ -141,7 +141,7 @@ static int print_special_string(char *s)
 
 static int print_pointer(void *ptr)
 {
-	if (!ptr)
+	if (!ptr)  // Handle NULL pointer
 		return print_text("(nil)");
 
 	unsigned long n = (unsigned long)ptr;
