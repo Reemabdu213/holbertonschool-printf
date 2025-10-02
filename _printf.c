@@ -77,6 +77,14 @@ static int handle_format(char c, va_list ap)
 		return (print_int(va_arg(ap, int)));
 	if (c == 'b')
 	return (print_binary(va_arg(ap, unsigned int)));
+if (c == 'u')
+    return (print_uint(va_arg(ap, unsigned int)));
+if (c == 'o')
+    return (print_octal(va_arg(ap, unsigned int)));
+if (c == 'x')
+    return (print_hex_low(va_arg(ap, unsigned int)));
+if (c == 'X')
+    return (print_hex_up(va_arg(ap, unsigned int)));
 
 	/* Unknown specifier: print it raw */
 	_putchar('%');
