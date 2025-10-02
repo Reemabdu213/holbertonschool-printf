@@ -139,6 +139,35 @@ static int print_special_string(char *s)
 	return total;
 }
 
+static int print_pointer(void *ptr)
+{
+	unsigned long n = (unsigned long)ptr;
+	int total = 0;
+
+	total += _putchar('0');
+	total += _putchar('x');
+
+	if (n == 0)
+		total += _putchar('0');
+	else
+	{
+		char *hex_digits = "0123456789abcdef";
+		char buf[16];
+		int i = 0;
+
+		while (n)
+		{
+			buf[i++] = hex_digits[n % 16];
+			n /= 16;
+		}
+
+		while (i--)
+			total += _putchar(buf[i]);
+	}
+
+	return total;
+}
+
 static int handle_format(char c, va_list ap)
 {
 	if (c == 'c')
@@ -147,6 +176,8 @@ static int handle_format(char c, va_list ap)
 		return print_text(va_arg(ap, char *));
 	if (c == 'S')
 		return print_special_string(va_arg(ap, char *));
+	if (c == 'p')
+		return print_pointer(va_arg(ap, void *));
 	if (c == '%')
 		return _putchar('%');
 	if (c == 'd' || c == 'i')
