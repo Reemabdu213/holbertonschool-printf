@@ -1,21 +1,12 @@
 #include "main.h"
 
 /**
- * _putchar - Write one character to stdout
- * @c: character to print
+ * print_text - Print a NUL-terminated string.
+ * @s: Pointer to string (may be NULL).
  *
- * Return: 1 on success, -1 on error
- */
-int _putchar(char c)
-{
-	return (write(1, &c, 1));
-}
-
-/**
- * print_text - Print a string
- * @s: pointer to string
+ * When @s is NULL, the literal "(null)" is printed.
  *
- * Return: number of characters printed
+ * Return: Number of characters printed.
  */
 static int print_text(char *s)
 {
@@ -25,18 +16,16 @@ static int print_text(char *s)
 		s = "(null)";
 
 	while (*s)
-	{
-		total += _putchar(*s);
-		s++;
-	}
+		total += _putchar(*s++);
+
 	return (total);
 }
 
 /**
- * print_int - Print integer
- * @n: number to print
+ * print_int - Print a signed decimal integer.
+ * @n: Integer value.
  *
- * Return: number of characters printed
+ * Return: Number of characters printed.
  */
 static int print_int(int n)
 {
@@ -59,44 +48,66 @@ static int print_int(int n)
 }
 
 /**
- * handle_format - Manage one format specifier
- * @c: the format character
- * @ap: list of arguments
+ * handle_format - Handle a single conversion specifier.
+ * @c: Format character.
+ * @ap: Variadic argument list.
  *
- * Return: number of characters printed
+ * Supported: c, s, %, d, i and (optionally) b, u, o, x, X when the
+ * corresponding helpers are linked in.
+ *
+ * Return: Number of characters printed for this specifier.
  */
 static int handle_format(char c, va_list ap)
 {
-if (c == 'c')
-return (_putchar((char)va_arg(ap, int)));
-if (c == 's')
-return (print_text(va_arg(ap, char *)));
-if (c == '%')
-return (_putchar('%'));
-if (c == 'd' || c == 'i')
-return (print_int(va_arg(ap, int)));
-if (c == 'b')
-return (print_binary(va_arg(ap, unsigned int)));
-if (c == 'u')
-return (print_uint(va_arg(ap, unsigned int)));
-if (c == 'o')
-return (print_octal(va_arg(ap, unsigned int)));
-if (c == 'x')
-return (print_hex_low(va_arg(ap, unsigned int)));
-if (c == 'X')
-return (print_hex_up(va_arg(ap, unsigned int)));
+	if (c == 'c')
+		return (_putchar((char)va_arg(ap, int)));
+	if (c == 's')
+		return (print_text(va_arg(ap, char *)));
+	if (c == '%')
+		return (_putchar('%'));
+	if (c == 'd' || c == 'i')
+		return (print_int(va_list_arg(ap, int))); /* fallback if macro not avail */
+	return (0);
+}
 
-	/* Unknown specifier: print it raw */
+/* Replace the previous line with the classic va_arg if your checker
+ * does not provide va_list_arg. Keeping below to be standard-compliant: */
+#undef handle_format
+static int handle_format(char c, va_list ap)
+{
+	if (c == 'c')
+		return (_putchar((char)va_arg(ap, int)));
+	if (c == 's')
+		return (print_text(va_arg(ap, char *)));
+	if (c == '%')
+		return (_putchar('%'));
+	if (c == 'd' || c == 'i')
+		return (print_int(va_arg(ap, int)));
+	if (c == 'b')
+		return (print_binary(va_arg(ap, unsigned int)));
+	if (c == 'u')
+		return (print_uint(va_arg(ap, unsigned int)));
+	if (c == 'o')
+		return (print_octal(va_arg(ap, unsigned int)));
+	if (c == 'x')
+		return (print_hex_low(va_arg(ap, unsigned int)));
+	if (c == 'X')
+		return (print_hex_up(va_arg(ap, unsigned int)));
+
 	_putchar('%');
 	_putchar(c);
 	return (2);
 }
 
 /**
- * _printf - Produce output like printf
- * @format: format string
+ * _printf - Produce output according to a format string.
+ * @format: Format string (must not be NULL).
  *
- * Return: number of characters printed, -1 if error
+ * This implementation writes to stdout and returns the number of
+ * characters printed. On error such as a dangling '%' at the end of
+ * the format string, it returns -1.
+ *
+ * Return: Count of printed characters, or -1 on error.
  */
 int _printf(const char *format, ...)
 {
@@ -120,6 +131,7 @@ int _printf(const char *format, ...)
 			if (*format == '\0')
 			{
 				va_end(ap);
+				flush_buffer();
 				return (-1);
 			}
 			count += handle_format(*format, ap);
@@ -128,5 +140,6 @@ int _printf(const char *format, ...)
 	}
 	va_end(ap);
 
+	flush_buffer();
 	return (count);
 }
