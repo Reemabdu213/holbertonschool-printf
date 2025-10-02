@@ -67,4 +67,4 @@ int print_hex_low(unsigned int n)
 int print_hex_up(unsigned int n)
 {
 	return (print_unsigned_base(n, 16, 1));
-} 
+}
