@@ -4,8 +4,6 @@
  * print_text - Print a NUL-terminated string.
  * @s: Pointer to string (may be NULL).
  *
- * When @s is NULL, the literal "(null)" is printed.
- *
  * Return: Number of characters printed.
  */
 static int print_text(char *s)
@@ -52,27 +50,8 @@ static int print_int(int n)
  * @c: Format character.
  * @ap: Variadic argument list.
  *
- * Supported: c, s, %, d, i and (optionally) b, u, o, x, X when the
- * corresponding helpers are linked in.
- *
  * Return: Number of characters printed for this specifier.
  */
-static int handle_format(char c, va_list ap)
-{
-	if (c == 'c')
-		return (_putchar((char)va_arg(ap, int)));
-	if (c == 's')
-		return (print_text(va_arg(ap, char *)));
-	if (c == '%')
-		return (_putchar('%'));
-	if (c == 'd' || c == 'i')
-		return (print_int(va_list_arg(ap, int))); /* fallback if macro not avail */
-	return (0);
-}
-
-/* Replace the previous line with the classic va_arg if your checker
- * does not provide va_list_arg. Keeping below to be standard-compliant: */
-#undef handle_format
 static int handle_format(char c, va_list ap)
 {
 	if (c == 'c')
@@ -102,10 +81,6 @@ static int handle_format(char c, va_list ap)
 /**
  * _printf - Produce output according to a format string.
  * @format: Format string (must not be NULL).
- *
- * This implementation writes to stdout and returns the number of
- * characters printed. On error such as a dangling '%' at the end of
- * the format string, it returns -1.
  *
  * Return: Count of printed characters, or -1 on error.
  */

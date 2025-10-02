@@ -9,10 +9,6 @@ static int flush_registered;
 
 /**
  * flush_buffer - Flush the internal buffered output to stdout.
- *
- * This function writes any pending bytes in the internal buffer using
- * write(2) and resets the buffer index. It is safe to call even if the
- * buffer is empty.
  */
 void flush_buffer(void)
 {
@@ -27,12 +23,7 @@ void flush_buffer(void)
  * _putchar - Queue a single character into a 1024-byte local buffer.
  * @c: Character to write.
  *
- * The function buffers characters and calls flush_buffer() when the
- * buffer becomes full. It also registers flush_buffer() with atexit(3)
- * on the first call so that any remaining bytes are flushed when the
- * program exits.
- *
- * Return: Always 1 (number of characters queued).
+ * Return: Always 1.
  */
 int _putchar(char c)
 {
