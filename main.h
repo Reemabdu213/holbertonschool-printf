@@ -6,6 +6,7 @@
 
 int _printf(const char *format, ...);
 int _putchar(char c);
+void flush_buffer(void);
 
 /* Advanced: binary support */
 int print_binary(unsigned int n);
