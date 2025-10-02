@@ -141,12 +141,11 @@ static int print_special_string(char *s)
 
 static int print_pointer(void *ptr)
 {
-	if (!ptr)  // Handle NULL pointer
-		return print_text("(nil)");
+	int total = 0;
+	if (!ptr)
+		return print_text
 
 	unsigned long n = (unsigned long)ptr;
-	int total = 0;
-
 	total += _putchar('0');
 	total += _putchar('x');
 
@@ -154,16 +153,18 @@ static int print_pointer(void *ptr)
 	char buf[16];
 	int i = 0;
 
+	if (n == 0)
+		total += _putchar('0');
 	while (n)
-	{
-		buf[i++] = hex_digits[n % 16];
-		n /= 16;
-	}
+    {
+        buf[i++] = hex_digits[n % 16];
+        n /= 16;
+    }
 
-	while (i--)
-		total += _putchar(buf[i]);
+    while (i--)
+        total += _putchar(buf[i]);
 
-	return total;
+    return total;
 }
 
 static int handle_format(char c, va_list ap)
