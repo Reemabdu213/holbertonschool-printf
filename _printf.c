@@ -141,30 +141,31 @@ static int print_special_string(char *s)
 
 static int print_pointer(void *ptr)
 {
-	int total = 0;
-	if (!ptr)
-		return print_text
-
 	unsigned long n = (unsigned long)ptr;
+	int total = 0;
+
 	total += _putchar('0');
 	total += _putchar('x');
 
-	char *hex_digits = "0123456789abcdef";
-	char buf[16];
-	int i = 0;
-
 	if (n == 0)
 		total += _putchar('0');
-	while (n)
-    {
-        buf[i++] = hex_digits[n % 16];
-        n /= 16;
-    }
+	else
+	{
+		char *hex_digits = "0123456789abcdef";
+		char buf[16];
+		int i = 0;
 
-    while (i--)
-        total += _putchar(buf[i]);
+		while (n)
+		{
+			buf[i++] = hex_digits[n % 16];
+			n /= 16;
+		}
 
-    return total;
+		while (i--)
+			total += _putchar(buf[i]);
+	}
+
+	return total;
 }
 
 static int handle_format(char c, va_list ap)
