@@ -4,8 +4,8 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-int _printf(const char *format, ...);
 int _putchar(char c);
+int _printf(const char *format, ...);
 
 /* Advanced: binary support */
 int print_binary(unsigned int n);
