@@ -1,0 +1,27 @@
+#include "main.h"
+#include <unistd.h>
+
+#define BUF_SIZE 1024
+
+/**
+ * _putchar - buffered output
+ * @c: character to print, or -1 to flush
+ *
+ * Return: 1 on success, -1 on error
+ */
+int _putchar(char c)
+{
+	static char buf[BUF_SIZE];
+	static int i;
+
+	if (c == -1 || i >= BUF_SIZE)
+	{
+		if (i > 0)
+			write(1, buf, i);
+		i = 0;
+	}
+	if (c != -1)
+		buf[i++] = c;
+
+	return (1);
+}
